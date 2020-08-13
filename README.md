@@ -1,6 +1,8 @@
 # 💻 **Ansible e exemplos de codigo**
-
 > Infraestrutura como código 🌐
+
+# **Install**
+- [Notes](https://github.com/luizgustavo77/Notes/blob/master/Cloud/Linux/ANSIBLE.md)
 
 # 🚀 **Propósito**
 > Alem do uso pessoal está é minha pequena contribuição sabendo que por diversas vezes encontrei exemplos e explicações na internet de maneira gratuita
