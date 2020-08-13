@@ -1,4 +1,4 @@
-# 💻 **Ansible e exemplos de codigo**
+# 💻 **Ansible**
 > Infraestrutura como código 🌐
 
 # **Install**
