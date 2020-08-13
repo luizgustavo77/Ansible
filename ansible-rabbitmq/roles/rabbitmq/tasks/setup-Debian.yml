@@ -1,0 +1,137 @@
+---
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+  become: yes
+
+- name: install wget
+  apt:
+    name:
+      - wget
+      - dpkg
+      - apt-transport-https
+    state: latest
+  become: yes
+
+- name: Download RabbitMQ package.
+  get_url:
+    url: "{{ rabbitmq_deb_url }}"
+    dest: "/tmp/{{ rabbitmq_deb }}"
+
+# SE DER ERRO FALTANDO O erlang
+# https://tecadmin.net/install-erlang-on-ubuntu/
+- name: remove erlang
+  apt:
+    name:
+        - erlang*
+    state: absent
+  become: yes
+
+- name: Download erlang.
+  shell: "wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb"
+  become: yes
+
+- name: Download erlang.
+  shell: "dpkg -i erlang-solutions_1.0_all.deb"
+  become: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+  become: yes
+
+- name: update
+  shell: "apt-get update"
+  become: yes
+
+- name: install erlang
+  apt:
+    name: erlang
+    state: latest
+  become: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+  become: yes
+
+- name: update
+  shell: "apt-get update"
+  become: yes
+
+- name: Install esl-erlang
+  apt:
+    name: esl-erlang
+    state: latest
+  become: yes
+
+- name: Ensure RabbitMQ is installed.
+  apt:
+    deb: "/tmp/{{ rabbitmq_deb }}"
+    state: present
+  become: yes
+
+- name: Install ufw
+  apt:
+    name: ufw
+    state: latest
+  become: yes
+
+- name: Allow everything and enable UFW
+  ufw:
+    state: enabled
+    policy: allow
+  become: yes
+
+- name: Allow all access to tcp
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+  with_items:
+  - 15672
+  - 5672
+  become: yes
+
+- name: Allow everything and enable UFW
+  ufw:
+    state: reloaded
+    policy: allow
+  become: yes
+
+#- name: open 15672
+#  shell: "ufw allow 15672/tcp"
+#  become: yes
+
+#- name: open 5672
+#  shell: "ufw allow 5672/tcp"
+#  become: yes
+#
+#- name: open 5672
+#  shell: "ufw reload"
+#  become: yes
+
+- name: instal pluggins
+  shell: "rabbitmq-plugins enable rabbitmq_management"
+  become: yes
+
+- name: instal pluggins
+  shell: "rabbitmq-plugins enable rabbitmq_management_agent"
+  become: yes
+
+- name: instal pluggins
+  shell: "rabbitmq-plugins enable rabbitmq_shovel"
+  become: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+  become: yes

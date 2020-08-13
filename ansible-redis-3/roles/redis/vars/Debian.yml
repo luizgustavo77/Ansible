@@ -1,0 +1,13 @@
+---
+__redis_package: redis-server
+redis_daemon: redis.server
+redis_conf_path: /etc/redis/redis.conf
+redis_requirepass: SENHA
+redis_disabled_commands:
+  - FLUSHDB
+  - FLUSHALL
+  - DEBUG
+  - CONFIG
+redis_disabled_commandss:
+  - SHUTDOWN SHUTDOWN_MENOT
+  - CONFIG ASC12_CONFIG

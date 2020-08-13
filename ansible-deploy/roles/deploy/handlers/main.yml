@@ -1,0 +1,12 @@
+---
+    
+- name: install npm
+  npm:
+    path: "{{ ymi_dir }}"
+  become: yes
+
+- name: generate bundle
+  command: npm run build:prod
+  args:
+   chdir: "{{ ymi_dir }}"
+  become: yes

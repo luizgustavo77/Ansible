@@ -1,0 +1,42 @@
+---
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+  become: yes
+
+- name: Instala Apache
+  apt: "name={{ apache_packages }} state={{ apache_packages_state }}"
+  become: yes
+
+- name: Install ufw
+  apt:
+    name:
+      - ufw
+      - git
+    state: latest
+  become: yes
+
+- name: Allow everything and enable UFW
+  ufw:
+    state: enabled
+    policy: allow
+  become: yes
+
+- name: Allow all access to tcp
+  ufw:
+    rule: allow
+    port: '{{ item }}'
+    proto: tcp
+  with_items:
+  - 80
+  - 443
+  become: yes
+
+- name: Upgrade all packages to the latest version
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+  become: yes

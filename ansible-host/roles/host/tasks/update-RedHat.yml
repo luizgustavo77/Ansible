@@ -1,0 +1,8 @@
+---
+- name: Update
+  shell: yum -y update
+  become: yes
+
+- name: Upgrade
+  shell: yum -y upgrade
+  become: yes

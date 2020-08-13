@@ -1,0 +1,14 @@
+---
+__redis_package: redis
+redis_daemon: redis-service
+redis_conf_path: /etc/redis.conf
+redis_port: 6379
+redis_password: SENHA
+redis_disabled_commands:
+  - FLUSHDB
+  - FLUSHALL
+  - DEBUG
+  - CONFIG
+redis_disabled_commandss:
+  - SHUTDOWN SHUTDOWN_MENOT
+  - CONFIG ASC12_CONFIG

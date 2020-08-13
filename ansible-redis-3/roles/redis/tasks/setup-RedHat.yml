@@ -1,0 +1,47 @@
+---
+#- name: 'pre-instalador'
+#  yum:
+#    name:
+#        - 'epel-release'
+#        - '*'
+#    state: present
+#  become: yes
+
+- name: 'instalador'
+  yum:
+    name:
+        - "{{ redis_package }}"
+    state: latest
+  become: yes
+  notify:
+     - started
+     - enable
+
+- name: Ensure Redis is configured.
+  template:
+    src: redis.conf.centos
+    dest: "{{ redis_conf_path }}"
+    mode: 0644
+  become: yes
+  notify:
+    - stop
+
+- name: open firewall
+  firewalld:
+      port: "{{ item.port }}"
+      permanent: "{{ item.permanent }}"
+      state: enabled
+  with_items:
+    - { port: '6379/tcp', permanent: true }
+  become: yes
+  notify:
+    - started
+
+#- name: 'Finaliza'
+#  yum:
+#    name:
+#        - '*'
+#    state: present
+#  become: yes
+#  notify:
+#    - started

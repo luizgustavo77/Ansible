@@ -1,0 +1,21 @@
+---
+- name: Upgrade
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+    update_cache: yes
+  become: yes
+
+- name: Instala
+  apt:
+    name: "{{ redis_package }}"
+    state: latest
+  become: yes
+
+- name: Ensure Redis is configured.
+  template:
+    src: redis.conf.debian
+    dest: "{{ redis_conf_path }}"
+    mode: 0644
+  become: yes

@@ -1,0 +1,43 @@
+---
+- name: update
+  shell: sudo yum -y update
+  become: yes
+
+- name: upgrade
+  shell: sudo yum -y upgrade
+  become: yes
+
+- name: Download RabbitMQ package.
+  get_url:
+    url: "{{ rabbitmq_rpm_url }}"
+    dest: "/tmp/{{ rabbitmq_rpm }}"
+
+- name: Ensure RabbitMQ is installed.
+  yum:
+    name: "/tmp/{{ rabbitmq_rpm }}"
+    state: present
+  become: yes
+
+- name: open firewall 15672 e 5672
+  firewalld:
+      port: "{{ item.port }}"
+      permanent: "{{ item.permanent }}"
+      state: enabled
+  with_items:
+    - { port: '15672/tcp', permanent: true }
+    - { port: '5672/tcp', permanent: true }
+    - { port: '4369/tcp', permanent: true }
+    - { port: '25672/tcp', permanent: true }
+  become: yes
+
+- name: instal pluggins
+  shell: "rabbitmq-plugins enable rabbitmq_management"
+  become: yes
+
+- name: instal pluggins
+  shell: "rabbitmq-plugins enable rabbitmq_management_agent"
+  become: yes
+
+- name: instal pluggins
+  shell: "rabbitmq-plugins enable rabbitmq_shovel"
+  become: yes

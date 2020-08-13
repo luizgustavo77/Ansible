@@ -1,0 +1,138 @@
+---
+- name: remove erlang
+  yum:
+    name:
+        - erlang*
+    state: absent
+  become: yes
+
+- name: install epel-release
+  yum:
+    name:
+        - 'epel-release'
+        - wget
+        - '*'
+    state: present
+  become: yes
+
+- name: wget erlang
+  shell: "wget http://packages.erlang-solutions.com/erlang-solutions-1.0-1.noarch.rpm"
+  become: yes
+
+- name: rpm erlang
+  shell: "rpm -Uvh erlang-solutions-1.0-1.noarch.rpm"
+  ignore_errors: True
+  become: yes
+
+- name: install erlang
+  yum:
+    name:
+        - erlang
+        - '*'
+    state: present
+  become: yes
+
+- name: Add packagecloud GPG key.
+  rpm_key:
+    key: "https://packagecloud.io/gpg.key"
+    state: present
+  become: yes
+
+- name: update
+  yum:
+    name:
+        - '*'
+    state: latest
+  become: yes
+  ignore_errors: True
+
+#- name: Ensure old versions of Docker are not installed.
+#  package:
+#    name:
+#      - docker
+#      - docker-common
+#      - docker-engine
+#    state: absent
+
+#- name: Add Docker GPG key.
+#  rpm_key:
+#    key: https://download.docker.com/linux/centos/gpg
+#    state: present
+#  become: yes
+
+#- name: Add Docker repository.
+#  get_url:
+#    url: "{{ docker_yum_repo_url }}"
+#    dest: '/etc/yum.repos.d/docker-{{ docker_edition }}.repo'
+#    owner: root
+#    group: root
+#    mode: 0644
+
+#- name: Configure Docker Edge repo.
+#  ini_file:
+#    dest: '/etc/yum.repos.d/docker-{{ docker_edition }}.repo'
+#    section: 'docker-{{ docker_edition }}-edge'
+#    option: enabled
+#    value: '{{ docker_yum_repo_enable_edge }}'
+
+#- name: Configure Docker Test repo.
+#  ini_file:
+#    dest: '/etc/yum.repos.d/docker-{{ docker_edition }}.repo'
+#    section: 'docker-{{ docker_edition }}-test'
+#    option: enabled
+#    value: '{{ docker_yum_repo_enable_test }}'
+
+- name: install
+  yum:
+    name:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+    state: latest
+  become: yes
+
+- name: Install Docker
+  shell: "yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo"
+  become: yes
+
+#- name: install
+#  yum:
+#    name:
+#        - docker-ce
+#    state: latest
+#  become: yes
+
+#- name: Install Docker
+#  shell: "usermod -aG docker $(whoami)"
+#  become: yes
+
+- name: Upgrade
+  yum:
+    name:
+        - '*'
+    state: latest
+  become: yes
+  notify:
+    - enable
+    - start
+
+- name: install pip
+  yum:
+    name:
+        - python-pip
+    state: latest
+  become: yes
+
+- name: install compose
+  pip:
+    name:
+        - docker-compose
+    state: latest
+  become: yes
+
+- name: Upgrade
+  yum:
+    name:
+        - '*'
+    state: latest
+  become: yes

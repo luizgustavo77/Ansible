@@ -1,0 +1,10 @@
+{# Set up apache #}
+<VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port }}>
+  DocumentRoot "{{ documentroot }}"
+  ServerName {{ servername }}
+  ServerAlias www.{{ servername }}
+  <Directory "{{ documentroot }}">
+     Options FollowSymLinks
+     AllowOverride All
+  </Directory>
+</VirtualHost>

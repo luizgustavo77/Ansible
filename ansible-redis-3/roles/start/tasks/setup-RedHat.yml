@@ -1,0 +1,18 @@
+---
+- name: 'Finaliza'
+  yum:
+    name:
+        - '*'
+    state: present
+  become: yes
+  notify:
+    - stop
+
+- name: 'Finaliza'
+  yum:
+    name:
+        - '*'
+    state: present
+  become: yes
+  notify:
+    - started

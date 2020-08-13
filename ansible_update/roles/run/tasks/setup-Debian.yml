@@ -1,0 +1,12 @@
+---
+- name: rodando o update
+  shell: apt-get -y update
+  ignore_errors: True
+  become: yes
+  warn: False
+
+- name: rodando upgrade
+  shell: apt-get -y upgrade
+  ignore_errors: True
+  become: yes
+  warn: False

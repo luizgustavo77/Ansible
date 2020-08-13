@@ -1,0 +1,9 @@
+---
+- name: Upgrade
+  apt:
+    name: "*"
+    state: latest
+    force_apt_get: True
+    update_cache: yes
+  ignore_errors: True
+  become: yes

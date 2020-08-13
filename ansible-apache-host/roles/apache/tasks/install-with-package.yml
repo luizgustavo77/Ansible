@@ -1,0 +1,13 @@
+---
+- name: Install Certbot.
+  package: "name={{ certbot_package }} state=latest"
+  become: yes
+
+- name: Install Apache Certbot.
+  package: "name={{ certbot_package_apache }} state=latest"
+  become: yes
+
+- name: Set Certbot script variable.
+  set_fact:
+    certbot_script: "{{ certbot_package }}"
+  become: yes

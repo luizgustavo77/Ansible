@@ -1,0 +1,17 @@
+---
+rabbitmq_daemon: rabbitmq-server
+rabbitmq_state: started
+rabbitmq_enabled: true
+ansible_distribution_major_version: 7
+rabbitmq_version: 3.7.14
+
+rabbitmq_rpm: "rabbitmq-server-{{ rabbitmq_version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
+rabbitmq_rpm_url: "https://github.com/rabbitmq/rabbitmq-server/releases/download/v{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
+
+rabbitmq_deb: "rabbitmq-server-{{ rabbitmq_version }}-1_all.deb"
+rabbitmq_deb_url: "https://github.com/rabbitmq/rabbitmq-server/releases/download/v{{ rabbitmq_version }}/rabbitmq-server-{{ rabbitmq_version }}-1_all.deb"
+
+
+#faca leitura da fila
+#enterprete o jeison
+#executa acoes conforme jeison

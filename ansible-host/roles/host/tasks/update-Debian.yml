@@ -1,0 +1,8 @@
+---
+- name: Update
+  shell: apt-get -y update
+  become: yes
+
+- name: Upgrade
+  shell: apt-get -y upgrade
+  become: yes

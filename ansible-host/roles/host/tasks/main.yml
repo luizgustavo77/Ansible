@@ -1,0 +1,30 @@
+---
+# Include variables and define needed variables.
+- name: Adiciona Variaveis.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Apache na Amazon Linux.
+  include_vars: "AmazonLinux.yml"
+  when:
+    - ansible_distribution == "Amazon"
+    - ansible_distribution_major_version == "NA"
+
+- name: adiciona permissao ao /var/www/
+  file:
+    path: /var/www/html
+    owner: root
+    group: root
+    mode: 0777
+  become: yes
+
+- name: Add apache hosts configuracao.
+  template:
+    src: "{{ apache_vhosts_template_ssl }}"
+    dest: "{{ apache_conf_path }}/conf.d/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify: restart apache
+
+- include_tasks: "update-{{ ansible_os_family }}.yml"

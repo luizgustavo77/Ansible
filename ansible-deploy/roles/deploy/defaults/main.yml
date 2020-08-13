@@ -1,0 +1,4 @@
+---
+ymi_dir: "/CAMINHO"
+repo: "https://github.com/REPO.git"
+pm2_start_app: "pm2 start /CAMINHO/app.js -i max"

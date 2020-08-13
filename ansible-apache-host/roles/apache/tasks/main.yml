@@ -1,0 +1,70 @@
+---
+# Include variables and define needed variables.
+- name: Adiciona Variaveis.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- name: Apache na Amazon Linux.
+  include_vars: "AmazonLinux.yml"
+  when:
+    - ansible_distribution == "Amazon"
+    - ansible_distribution_major_version == "NA"
+
+- name: Define apache_packages.
+  set_fact:
+    apache_packages: "{{ __apache_packages | list }}"
+  when: apache_packages is not defined
+
+# install APACHE e abre portas
+- include_tasks: "setup-{{ ansible_os_family }}.yml"
+
+#- name: Adiciona repo
+#  git:
+#    repo: "https://github.com/luizgustavo77/CV.git"
+#    dest: /var/www/html/
+#    recursive: yes
+#    force: yes
+#    update: yes
+#  become: yes
+
+- name: adiciona permissao ao /var/www/
+  file:
+    path: /var/www/html
+    owner: root
+    group: root
+    mode: 0777
+  become: yes
+
+# adiciona hosts.conf da porta 80 e 443
+- include_tasks: "configure-{{ ansible_os_family }}.yml"
+
+- import_tasks: include-vars.yml
+
+- import_tasks: install-with-package.yml
+
+- name: Adiciona Variaveis.
+  include_vars: "{{ ansible_os_family }}.yml"
+
+- include_tasks: "update-{{ ansible_os_family }}.yml"
+
+- import_tasks: install-from-source.yml
+
+- include_tasks: create-cert-standalone.yml
+
+- name: Add httpd.conf
+  template:
+    src: "{{ apache_vhosts_template_httpd }}"
+    dest: "{{ apache_conf_path_httpd }}/conf/{{ apache_vhosts_filename_httpd }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+
+- name: Add apache hosts configuracao com ssl
+  template:
+    src: "{{ apache_vhosts_template_ssl }}"
+    dest: "{{ apache_conf_path }}/conf.d/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify: restart apache

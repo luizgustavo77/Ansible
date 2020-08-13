@@ -1,0 +1,20 @@
+---
+- name: Clone Certbot into configured directory.
+  git:
+    repo: "{{ certbot_repo }}"
+    dest: "{{ certbot_dir }}"
+    version: "{{ certbot_version }}"
+    update: "{{ certbot_keep_updated }}"
+    force: true
+  become: yes
+
+- name: Set Certbot script variable.
+  set_fact:
+    certbot_script: "{{ certbot_dir }}/certbot-auto"
+  become: yes
+
+- name: Changing perm adding "a+x"
+  file:
+    dest: "{{ certbot_dir }}/certbot-auto"
+    mode: a+x
+  become: yes

@@ -1,0 +1,10 @@
+---
+- name: rodando o update
+  shell: yum -y update
+  ignore_errors: True
+  become: yes
+
+- name: rodando upgrade
+  shell: yum -y upgrade
+  ignore_errors: True
+  become: yes

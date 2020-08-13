@@ -1,0 +1,27 @@
+{# Set up apache #}
+<VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port }}>
+  DocumentRoot "{{ documentroot }}"
+  ServerName {{ servername }}
+  ServerAlias www.{{ servername }}
+  RewriteEngine On
+  RewriteCond %{HTTP:X-Forwarded-Proto} =http
+  RewriteRule .* https://%{HTTP:Host}%{REQUEST_URI} [L,R=permanent]
+  <Directory "{{ documentroot }}">
+     AllowOverride All
+     Options FollowSymLinks
+  </Directory>
+</VirtualHost>
+
+{# Set up apache ssl #}
+<VirtualHost {{ apache_listen_ip }}:{{ apache_listen_port_ssl }}>
+  DocumentRoot "{{ documentroot }}"
+  ServerName {{ servername }}
+  ServerAlias www.{{ servername }}
+  SSLCertificateFile /etc/letsencrypt/live/{{ servername }}/cert.pem
+  SSLCertificateKeyFile /etc/letsencrypt/live/{{ servername }}/privkey.pem
+  SSLCertificateChainFile /etc/letsencrypt/live/{{ servername }}/chain.pem
+  <Directory "{{ documentroot }}">
+     Options FollowSymLinks
+     AllowOverride All
+  </Directory>
+</VirtualHost>

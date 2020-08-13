@@ -1,0 +1,28 @@
+---
+- name: restart redis
+  service: "name={{ redis_daemon }} state=restarted"
+  become: yes
+
+- name: start
+  systemd:
+    name: redis.service
+    state: restarted
+  become: yes
+
+- name: enable
+  systemd:
+    name: redis
+    enabled: yes
+  become: yes
+
+- name: update_centos
+  yum:
+    name: '*'
+    state: latest
+  become: yes
+
+- name: update_debian
+  apt:
+    name: '*'
+    state: latest
+  become: yes

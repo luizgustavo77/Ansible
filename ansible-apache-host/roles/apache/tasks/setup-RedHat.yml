@@ -1,0 +1,37 @@
+---
+- name: update
+  yum:
+    name:
+        - yum-utils
+    state: present
+  become: yes
+
+- name: Install Apache
+  package:
+    name: "{{ apache_packages }}"
+    state: "{{ apache_packages_state }}"
+    enablerepo: "{{ apache_enablerepo | default(omit, true) }}"
+  become: yes
+
+- name: open firewall
+  firewalld:
+      port: "{{ item.port }}"
+      permanent: "{{ item.permanent }}"
+      state: enabled
+  with_items:
+    - { port: '80/tcp', permanent: true }
+    - { port: '443/tcp', permanent: true }
+  become: yes
+
+- name: Reinicia firewalld
+  service: name=firewalld state=restarted
+  become: yes
+
+- name: update
+  yum:
+    name:
+        - 'epel-release'
+        - git
+        - '*'
+    state: present
+  become: yes

@@ -1,0 +1,48 @@
+---
+- name: restart
+  systemd:
+    name: redis.service
+    state: restart
+  become: yes
+
+- name: restarted
+  systemd:
+    name: redis
+    state: restart
+  become: yes
+
+- name: stop
+  systemd:
+    name: redis.service
+    state: stop
+  become: yes
+
+- name: start
+  systemd:
+    name: redis.service
+    state: start
+  become: yes
+
+- name: started
+  systemd:
+    name: redis.service
+    state: started
+  become: yes
+
+- name: enable
+  systemd:
+    name: redis
+    enabled: yes
+  become: yes
+
+- name: update_centos
+  yum:
+    name: '*'
+    state: latest
+  become: yes
+
+- name: update_debian
+  apt:
+    name: '*'
+    state: latest
+  become: yes

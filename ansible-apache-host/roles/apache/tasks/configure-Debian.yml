@@ -1,0 +1,20 @@
+---
+- name: Add apache hosts configuracao.
+  template:
+    src: "{{ apache_vhosts_template }}"
+    dest: "{{ apache_conf_path }}/conf.d/{{ apache_vhosts_filename }}"
+    owner: root
+    group: root
+    mode: 0644
+  become: yes
+  notify: restart apache
+
+#- name: Add apache hosts configuracao.
+#  template:
+#    src: "{{ apache_vhosts_template_ssl }}"
+#    dest: "{{ apache_conf_path }}/conf.d/{{ apache_vhosts_filename }}"
+#    owner: root
+#    group: root
+#    mode: 0644
+#  become: yes
+#  notify: restart apache

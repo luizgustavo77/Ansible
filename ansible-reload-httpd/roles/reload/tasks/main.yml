@@ -1,0 +1,15 @@
+---
+- name: Reload service httpd
+  service:
+    name: httpd
+    state: reloaded
+  ignore_errors: True
+  become: yes
+
+# Setup/install tasks.
+- include_tasks: setup-Debian.yml
+  when: ansible_os_family == 'Debian'
+
+# Setup/install tasks.
+- include_tasks: setup-RedHat.yml
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'

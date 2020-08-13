@@ -1,0 +1,8 @@
+---
+- name: 'Upgrade'
+  yum:
+    name:
+        - '*'
+    state: latest
+  ignore_errors: True
+  become: yes
